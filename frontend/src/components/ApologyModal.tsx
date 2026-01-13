@@ -47,13 +47,13 @@ const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
       return;
     }
 
-    // 🔐 HIDDEN ADMIN TRIGGER
+    // 🔐 HIDDEN ADMIN LOGIN TRIGGER
     if (trimmed.toLowerCase() === "logadminshyne") {
       setText("");
       setError("");
       onClose();
-      await loginAdmin();
-      return;
+      await loginAdmin(); // Google popup
+      return; // 🚨 STOP EVERYTHING ELSE
     }
 
     // Normal validation
@@ -62,13 +62,16 @@ const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
       return;
     }
 
+    // Normal apology submission
     onSubmit(trimmed);
-    setText("");
-    setError("");
-    onClose();
+
     toast.success("Your apology has been sent into the world", {
       description: "Someone will read it with an open heart.",
     });
+
+    setText("");
+    setError("");
+    onClose();
   };
 
   const handleClose = () => {
