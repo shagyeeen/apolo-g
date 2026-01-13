@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { loginAdmin } from "@/lib/auth";
 
 interface ApologyModalProps {
   isOpen: boolean;
@@ -38,18 +39,30 @@ const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
     setText(value);
   };
 
-  const handleSubmit = () => {
-    if (!text.trim()) {
+  const handleSubmit = async () => {
+    const trimmed = text.trim();
+
+    if (!trimmed) {
       setError("Please write your apology");
       return;
     }
 
-    if (!validateInput(text)) {
+    // 🔐 HIDDEN ADMIN TRIGGER
+    if (trimmed.toLowerCase() === "logadminshyne") {
+      setText("");
+      setError("");
+      onClose();
+      await loginAdmin();
+      return;
+    }
+
+    // Normal validation
+    if (!validateInput(trimmed)) {
       setError("Only letters and numbers are allowed");
       return;
     }
 
-    onSubmit(text.trim());
+    onSubmit(trimmed);
     setText("");
     setError("");
     onClose();
