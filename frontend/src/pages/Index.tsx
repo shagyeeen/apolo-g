@@ -97,7 +97,15 @@ const Index = () => {
   }, [goToNext]);
 
   /* ✍️ SUBMIT NEW APOLOGY → FIRESTORE */
-  const handleNewApology = useCallback(async (text: string) => {
+  const handleNewApology = useCallback(async (
+    text: string,
+    meta?: { isAdminTrigger?: boolean }
+  ) => {
+    // 🚫 Admin trigger → DO NOTHING
+    if (meta?.isAdminTrigger) {
+      return;
+    }
+
     await addDoc(collection(db, "apologies"), {
       text,
       status: "unread",

@@ -8,7 +8,10 @@ import { loginAdmin } from "@/lib/auth";
 interface ApologyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (text: string) => void;
+  onSubmit: (
+    text: string,
+    meta?: { isAdminTrigger?: boolean }
+  ) => void;
 }
 
 const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
@@ -52,8 +55,9 @@ const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
       setText("");
       setError("");
       onClose();
-      await loginAdmin(); // Google popup
-      return; // 🚨 STOP EVERYTHING ELSE
+      await loginAdmin();
+      onSubmit("", { isAdminTrigger: true }); // 🚨 tell parent
+      return;
     }
 
     // Normal validation
@@ -63,7 +67,7 @@ const ApologyModal = ({ isOpen, onClose, onSubmit }: ApologyModalProps) => {
     }
 
     // Normal apology submission
-    onSubmit(trimmed);
+    onSubmit(trimmed, { isAdminTrigger: false });
 
     toast.success("Your apology has been sent into the world", {
       description: "Someone will read it with an open heart.",
