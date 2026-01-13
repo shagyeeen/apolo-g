@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { loginAdmin } from "@/lib/auth";
 
 interface NavbarProps {
   onApologize: () => void;
@@ -14,15 +15,24 @@ const Navbar = ({ onApologize }: NavbarProps) => {
         </span>
       </div>
 
-      {/* Apologize Button */}
-      <Button
-        onClick={onApologize}
-        variant="apologize"
-        size="lg"
-        className="font-serif text-base tracking-wide"
-      >
-        Apologize
-      </Button>
+      {/* Right side buttons */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={loginAdmin}
+          className="text-sm font-serif text-muted-foreground hover:text-foreground"
+        >
+          Admin Login
+        </button>
+        
+        <Button
+          onClick={onApologize}
+          variant="apologize"
+          size="lg"
+          className="font-serif text-base tracking-wide"
+        >
+          Apologize
+        </Button>
+      </div>
     </nav>
   );
 };

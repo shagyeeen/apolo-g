@@ -60,7 +60,7 @@ const Index = () => {
   /* 👤 DETECT ADMIN USER */
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      setIsAdmin(user?.email === "YOUR_ADMIN_EMAIL@gmail.com");
+      setIsAdmin(user?.email === "shagyeeen@gmail.com");
     });
     return () => unsub();
   }, []);
