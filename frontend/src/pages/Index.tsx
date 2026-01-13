@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { collection, getDocs, orderBy, query, addDoc, serverTimestamp, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, serverTimestamp, deleteDoc, doc, updateDoc, increment } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
@@ -75,16 +75,26 @@ const Index = () => {
   }, []);
 
   /* ❤️ ACCEPT */
-  const handleAccept = useCallback(() => {
-    if (isHeartAnimating || isTearAnimating || isTransitioning) return;
+  const handleAccept = useCallback(async () => {
+    if (isHeartAnimating || isTearAnimating || isTransitioning || !currentApology) return;
+    
+    await updateDoc(doc(db, "apologies", currentApology.id), {
+      acceptCount: increment(1),
+    });
+    
     setIsHeartAnimating(true);
-  }, [isHeartAnimating, isTearAnimating, isTransitioning]);
+  }, [isHeartAnimating, isTearAnimating, isTransitioning, currentApology]);
 
   /* 📄 SKIP */
-  const handleSkip = useCallback(() => {
-    if (isHeartAnimating || isTearAnimating || isTransitioning) return;
+  const handleSkip = useCallback(async () => {
+    if (isHeartAnimating || isTearAnimating || isTransitioning || !currentApology) return;
+    
+    await updateDoc(doc(db, "apologies", currentApology.id), {
+      skipCount: increment(1),
+    });
+    
     setIsTearAnimating(true);
-  }, [isHeartAnimating, isTearAnimating, isTransitioning]);
+  }, [isHeartAnimating, isTearAnimating, isTransitioning, currentApology]);
 
   const handleHeartComplete = useCallback(() => {
     setIsHeartAnimating(false);
